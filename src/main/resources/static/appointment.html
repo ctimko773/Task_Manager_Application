@@ -1,0 +1,58 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Appointment List</h1>
+    <button onclick="location.href='index.html'">Back to Home</button>
+    <button onclick = "bubbleAnimate()" id="bubble">Start Bubble Sort</button>
+
+    <span id = "sort-status"></span>
+
+    <div style="text-align: center; margin: 20px 0;">
+        <input type="text" id="search-input" placeholder="Search by description..">
+    <span id="search-status"></span>
+    </div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Appointment ID</th>
+        <th>Date</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+  <tbody id="appointment-body">
+
+  </tbody>
+</table>
+
+<script>
+    let appointments = [];  // global so bubbleAnimate() in main.js can access it
+
+    function renderTable(data) {
+        const tbody = document.getElementById('appointment-body');
+        console.log("tbody", tbody);
+        console.log("data", data.length);
+        tbody.innerHTML = data.map(appointment => `
+            <tr>
+                <td>${appointment.appointmentID}</td>
+                <td>${appointment.appointmentDate}</td>
+                <td>${appointment.appointmentDisc}</td>
+            </tr>
+        `).join('');
+    }
+
+    fetch('/api/appointments')
+        .then(response => response.json())
+        .then(data => {
+            appointments = data;        // store globally
+            renderTable(appointments);  // render on load
+        })
+        .catch(error => console.error('Error fetching appointments:', error));
+</script>
+
+<script src="appointmentBubble.js"></script>
+</body>
